@@ -1,28 +1,39 @@
 #!/usr/bin/env python3
 """
 Demo 3: Barred potential — box and loop orbits in the corotating frame.
-The static Ferrers bar is aligned with the x-axis. agma.orbit(Omega=Ω)
-returns coordinates in the frame rotating at Ω, where the bar is stationary.
+agama.orbit(Omega=Ω) integrates in the rotating frame; returned (x,y,z)
+are corotating coordinates. The static Ferrers bar (axisRatioY=0.35) is
+aligned with the x-axis and stationary in these coordinates.
+
+True box orbits: Lz oscillates through zero frequently AND orbit is
+elongated along the bar (x_std >> y_std).
+Loop orbits: Lz preserves sign, circulate around center.
 
 Output: bar_box_orbit.pdf, bar_loop_orbit.pdf
 """
 import agama, numpy as np, os, matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib.patches import Ellipse
 
 CONFIG = os.path.join(os.path.dirname(__file__), 'bar_potential.ini')
 agama.setUnits(length=1, velocity=1, mass=1)
 TU = 0.978
+Omega_bar = -40.0  # km/s/kpc
 
-Omega_bar = -40.0  # km/s/kpc, negative = clockwise
+# Bar structural parameters (must match bar_potential.ini)
+BAR_AXIS_X = 4.0       # scaleRadius (kpc)
+BAR_AXIS_RATIO = 0.35  # axisRatioY — y/x
 
 def main():
     print("=== Demo 3: Barred potential — box & loop orbits (corotating) ===")
     pot = agama.Potential(file=CONFIG)
 
+    # ----- generate ICs -----
     candidates = []; info = []
-    # Box: from bar axis, tiny tangential velocity
-    for R in [2.5, 3.0, 3.5, 4.0, 4.5, 5.0]:
+
+    # Box candidates: launched from bar major axis, nearly radial
+    for R in [2.5, 3.0, 3.5, 4.0, 4.5]:
         vc = (-R * pot.force([[R, 0, 0]])[0, 0])**0.5
         for f_tan in [0.001, 0.003, 0.005, 0.01, 0.03]:
             for f_rad in [0.01, 0.02, 0.05, 0.10, 0.20]:
@@ -31,7 +42,7 @@ def main():
                 candidates.append([R, 0, 0, v_r, v_phi, 0])
                 info.append(('box', R, f_tan, f_rad))
 
-    # Loop: enough tangential velocity to circulate
+    # Loop candidates: from various positions with significant tangential velocity
     for R in [3.0, 4.0, 5.0, 6.0]:
         vc = (-R * pot.force([[R, 0, 0]])[0, 0])**0.5
         for f_tan in [0.60, 0.70, 0.80, 0.90]:
@@ -47,11 +58,18 @@ def main():
     candidates = np.array(candidates)
     print(f"  {len(candidates)} ICs, Omega={Omega_bar} km/s/kpc")
 
-    # Integrate in rotating frame — bar is stationary here
+    # ----- integrate in corotating frame -----
     T_int = 8.0 / TU
     _, trajs = agama.orbit(potential=pot, ic=candidates, time=T_int,
                            Omega=Omega_bar, trajsize=5001, separateTime=True)
 
+    # ----- CLASSIFICATION (corrected) -----
+    # True box orbit in a barred potential:
+    #   1. Lz sign changes frequently (zc large) — crosses center
+    #   2. Elongated along bar major axis (x_std >> y_std)
+    # Loop orbit:
+    #   1. Lz sign rarely or never changes (zc small)
+    #   2. Substantial |Lz| (circulates)
     box_score = []; loop_score = []
     for i in range(len(candidates)):
         tr = trajs[i]
@@ -59,23 +77,30 @@ def main():
         Lz = x * tr[:, 4] - y * tr[:, 3]
         zc = np.sum(np.diff(np.sign(Lz)) != 0)
         x_std, y_std = np.std(x), np.std(y)
-        aspect = min(x_std, y_std) / max(x_std, y_std) if max(x_std, y_std) > 0 else 1
+        elongation = x_std / y_std if y_std > 0 else 1.0  # >1 means stretched along x
         mean_Lz = np.mean(np.abs(Lz))
 
-        is_box = zc > 30 and aspect > 0.3
-        bs = zc * aspect if is_box else 0
-        is_loop = zc < 10 and mean_Lz > 10
-        ls = -zc + mean_Lz * 0.1 if is_loop else 0
+        # Box: frequently crosses center AND stretched along bar
+        is_box = zc > 40 and elongation > 1.5
+        bs = zc * elongation if is_box else 0
+
+        # Loop: steady circulation
+        is_loop = zc < 5 and mean_Lz > 5
+        ls = mean_Lz / (zc + 1) if is_loop else 0
+
         box_score.append(bs); loop_score.append(ls)
 
     box_idx = np.argmax(box_score)
     loop_idx = np.argmax(loop_score)
-    print(f"  Box:  IC #{box_idx} (R={info[box_idx][1]:.1f}, f_tan={info[box_idx][2]:.3f})")
-    print(f"  Loop: IC #{loop_idx} (R={info[loop_idx][1]:.1f}, f_tan={info[loop_idx][2]:.2f})")
+    print(f"  Box:  IC #{box_idx}  R0={info[box_idx][1]:.1f}  "
+          f"f_tan={info[box_idx][2]:.3f}  elongation={np.std(trajs[box_idx][:,0])/np.std(trajs[box_idx][:,1]):.1f}")
+    print(f"  Loop: IC #{loop_idx}  R0={info[loop_idx][1]:.1f}  "
+          f"f_tan={info[loop_idx][2]:.2f}  Lz_zc={np.sum(np.diff(np.sign(trajs[loop_idx][:,0]*trajs[loop_idx][:,4]-trajs[loop_idx][:,1]*trajs[loop_idx][:,3]))!=0)}")
 
+    # ----- plot -----
     for idx, label, colour, fname in [
-        (box_idx, 'Box (oscillates along bar/x-axis)', 'blue', 'bar_box_orbit.pdf'),
-        (loop_idx, 'Loop (circulates around center)', 'red', 'bar_loop_orbit.pdf')]:
+        (box_idx, 'Box (along bar, corotating)', 'blue', 'bar_box_orbit.pdf'),
+        (loop_idx, 'Loop (corotating)', 'red', 'bar_loop_orbit.pdf')]:
         tr = trajs[idx]
         lim = np.max(np.abs(tr[:, :3]))
         fig, axes = plt.subplots(1, 3, figsize=(14, 4.5))
@@ -86,6 +111,11 @@ def main():
             ax.plot(tr[:, i], tr[:, j], '-', lw=0.5, color=colour)
             ax.set_xlim(-lim, lim); ax.set_ylim(-lim, lim)
             ax.set_aspect('equal'); ax.set_xlabel(xl); ax.set_ylabel(yl)
+            # Mark bar boundary on x-y panel
+            if ax == axes[0]:
+                ax.add_patch(Ellipse((0, 0),
+                    width=2*BAR_AXIS_X, height=2*BAR_AXIS_X*BAR_AXIS_RATIO,
+                    edgecolor='grey', facecolor='none', ls='--', lw=1, alpha=0.6))
         axes[0].set_title(f'Barred (corotating): {label}')
         fig.tight_layout(); fig.savefig(fname); plt.close()
         print(f"  Saved {fname}")
