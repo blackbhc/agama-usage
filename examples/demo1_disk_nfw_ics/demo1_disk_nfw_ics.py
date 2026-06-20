@@ -8,8 +8,7 @@ Output: galaxy_ics.dat (columns: x y z vx vy vz mass)
 """
 import agama, numpy as np, os
 
-CONFIG = os.path.join(os.path.dirname(__file__), '..', 'configs',
-                       'test1_exponential_disk_nfw.ini')
+CONFIG = os.path.join(os.path.dirname(__file__), 'galaxy.ini')
 N_DISK = 20000
 N_HALO = 5000
 OUTPUT  = 'galaxy_ics.dat'

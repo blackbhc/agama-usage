@@ -10,9 +10,8 @@ import agama, numpy as np, os, matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-CONFIG = os.path.join(os.path.dirname(__file__), '..', 'configs',
-                       'test3_bar_potential.ini')
-OUTPUT_DIR = os.path.join(os.path.dirname(__file__), '..', 'outputs')
+CONFIG = os.path.join(os.path.dirname(__file__), 'bar_potential.ini')
+OUTPUT_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'outputs')
 
 agama.setUnits(length=1, velocity=1, mass=1)
 TU = 0.978

@@ -10,7 +10,7 @@ import agama, numpy as np, os, matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-OUTPUT_DIR = os.path.join(os.path.dirname(__file__), '..', 'outputs')
+OUTPUT_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'outputs')
 
 agama.setUnits(length=1, velocity=1, mass=1)
 TU = 0.978
