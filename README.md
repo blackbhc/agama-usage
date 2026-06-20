@@ -20,9 +20,9 @@ agama-usage/
 │   ├── test2_mw_host.ini     # MW-like host (Dehnen+disk+Log halo)
 │   └── test3_bar_potential.ini  # Bulge+disk+Ferrers bar+NFW halo
 ├── examples/                 # Standalone demo folders (each has script + config)
-│   ├── demo1_disk_nfw_ics/           # Exp disk + NFW N-body ICs
-│   ├── demo2_binary_bh_particles/    # Binary BH test particle orbits
-│   ├── demo3_bar_box_loop_orbits/    # Barred: box & loop orbits
+│   ├── demo1/           # Exp disk + NFW N-body ICs
+│   ├── demo2/    # Binary BH test particle orbits
+│   ├── demo3/    # Barred: box & loop orbits
 │   └── demo4_elliptical_box_loop_orbits/  # Triaxial ellip: box & tube orbits
 └── reference/                # Detailed API reference docs
     ├── potentials.md

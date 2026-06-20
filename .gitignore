@@ -46,7 +46,7 @@ outputs/
 *.dat
 
 # Generated outputs from demos
-examples/*/*.dat
-examples/*/bh_*.pdf
-examples/*/bar_*.pdf
-examples/*/ellip_*.pdf
+examples/demo*/*.dat
+examples/demo*/bh_*.pdf
+examples/demo*/bar_*.pdf
+examples/demo*/ellip_*.pdf
