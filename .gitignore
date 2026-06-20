@@ -1,2 +1,44 @@
-agama-usage
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# Results & outputs
 results/
+*.gadget
+*.nemo
+*.txt
+*.log
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Editors
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.iml
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Environment
+.env
+.venv
+venv/
+env/
+
+# OS
+Thumbs.db

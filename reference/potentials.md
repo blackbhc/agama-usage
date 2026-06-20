@@ -1,6 +1,18 @@
 # Potential & Density Models Reference
 
-All density/potential models are created through:
+## Construction Methods
+
+### Method 1: INI Configuration Files (Recommended)
+Keep model parameters in standalone `.ini` files:
+
+```python
+# Load all [Potential*] sections from an INI file as a composite potential
+pot = agama.Potential(file='path/to/model.ini')
+```
+
+See **INI Format** below and the `configs/` directory in this skill repo for examples.
+
+### Method 2: Python Dicts
 ```python
 dens = agama.Density(params_dict)
 pot  = agama.Potential(params_dict)
@@ -9,6 +21,28 @@ pot = agama.Potential(dict1, dict2, ...)
 pot = agama.Potential(pot_obj1, pot_obj2, ...)
 ```
 
+## INI Format
+```ini
+# Lines starting with # are comments
+# Section name must start with 'Potential' (case-insensitive)
+
+[Potential anything here]
+type = Spheroid         # required: density/potential class name
+mass = 1e12             # model parameter
+scaleRadius = 15.0      # another parameter
+axisRatioZ = 0.8        # flattening
+
+[Potential another component]
+type = Disk
+mass = 5e10
+scaleRadius = 3.0
+scaleHeight = 0.3
+```
+
+AGAMA ships with many INI files in its `data/` directory (McMillan17.ini, MWPotential2014.ini, etc.),
+and this skill includes several reference INIs in `configs/`.
+
+## 1. Common Modifier Parameters
 ## 1. Common Modifier Parameters
 
 Applied to any potential as extra dict keys:
