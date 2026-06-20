@@ -46,7 +46,7 @@ outputs/
 *.dat
 
 # Generated outputs from demos
-examples/*/galaxy_ics.dat
+examples/*/*.dat
 examples/*/bh_*.pdf
 examples/*/bar_*.pdf
 examples/*/ellip_*.pdf
