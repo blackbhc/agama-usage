@@ -59,7 +59,7 @@ def main():
     print(f"  {len(candidates)} ICs, Omega={Omega_bar} km/s/kpc")
 
     # ----- integrate in corotating frame -----
-    T_int = 8.0 / TU
+    T_int = 4.0 / TU
     _, trajs = agama.orbit(potential=pot, ic=candidates, time=T_int,
                            Omega=Omega_bar, trajsize=5001, separateTime=True)
 
