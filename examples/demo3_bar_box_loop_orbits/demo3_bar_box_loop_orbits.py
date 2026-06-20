@@ -46,8 +46,8 @@ def main():
     for R in [2.5, 3.0, 3.5, 4.0, 4.5, 5.0]:
         vc = (-R * pot.force([[R, 0, 0]])[0, 0])**0.5
         # Very little tangential motion
-        for f_tan in [0.0, 0.03, 0.06, 0.10, 0.15]:
-            for f_rad in [0.1, 0.2, 0.3, 0.4]:
+        for f_tan in [0.001, 0.003, 0.005, 0.01, 0.03]:
+            for f_rad in [0.01, 0.02, 0.05, 0.10, 0.20]:
                 v_phi = vc * f_tan
                 v_r = vc * f_rad * (1 if np.random.rand() > 0.5 else -1)
                 candidates.append([R, 0, 0, v_r, v_phi, 0])
