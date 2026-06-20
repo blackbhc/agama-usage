@@ -35,7 +35,7 @@ def main():
     # Box candidates: launched from bar major axis, nearly radial
     for R in [2.5, 3.0, 3.5, 4.0, 4.5]:
         vc = (-R * pot.force([[R, 0, 0]])[0, 0])**0.5
-        for f_tan in [0.004, 0.012, 0.02, 0.04, 0.12]:
+        for f_tan in [0.008, 0.024, 0.04, 0.08, 0.24]:
             for f_rad in [0.01, 0.02, 0.05, 0.10, 0.20]:
                 v_phi = vc * f_tan
                 v_r = vc * f_rad * (1 if np.random.rand() > 0.5 else -1)
