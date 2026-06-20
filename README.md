@@ -72,7 +72,7 @@ cd Agama
 pip install .
 ```
 
-Requires: numpy, scipy, matplotlib, GSL.
+Requires: numpy, scipy, matplotlib, GSL. For more details, refer to the official AGAMA repository: <https://github.com/GalacticDynamics-Oxford/Agama>
 
 ## License
 
