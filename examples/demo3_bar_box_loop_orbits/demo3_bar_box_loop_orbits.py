@@ -26,14 +26,14 @@ def main():
     # Read base potential from INI, then add rotation to the bar component
     # so that the bar rotates at Omega_bar in the inertial frame.
     base = agama.Potential(file=CONFIG)
-    # The bar is component index 2 (0=bulge, 1=disk, 2=bar, 3=halo)
+    # INI: 0=disk, 1=bar, 2=halo
     # Add rotation modifier: bar rotates at Omega_bar
     pot_bar = agama.Potential(
         type='Ferrers', mass=2e10, scaleRadius=4.0,
         axisRatioY=0.35, axisRatioZ=0.2,
         rotation=[[0, 0], [1000, Omega_bar * 1000]])
     # Total potential: static components + rotating bar
-    pot = agama.Potential(base[0], base[1], pot_bar, base[3])
+    pot = agama.Potential(base[0], pot_bar, base[2])
     print("  Bar has rotation modifier (rotating in inertial frame)")
 
     # Generate ICs designed to produce box vs loop orbits in corotating frame
