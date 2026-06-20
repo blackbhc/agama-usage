@@ -2,7 +2,7 @@
 
 **AGAMA galactic dynamics skill — potentials, distribution functions, N-body ICs, orbit integration, test particle simulations, action/angles, and self-consistent modeling.**
 
-This is a [Kun](https://kun.app) skill for guiding AI agents in using the [AGAMA](https://github.com/GalacticDynamics-Oxford/Agama) library (Action-based GAlaxy Modeling Architecture).
+A skill for guiding AI agents in using the [AGAMA](https://github.com/GalacticDynamics-Oxford/Agama) library (Action-based GAlaxy Modeling Architecture).
 
 ## Repository Structure
 
