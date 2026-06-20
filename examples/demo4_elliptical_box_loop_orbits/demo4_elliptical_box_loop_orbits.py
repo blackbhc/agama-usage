@@ -66,11 +66,12 @@ def main():
     print(f"  Loop candidate {loop_idx}: loop_score={loop_scores[loop_idx]:.0f}")
 
     # Common axis limits
-    lim = max(np.max(np.abs(trajs[box_idx][:,:3])), np.max(np.abs(trajs[loop_idx][:,:3])))
+    lim_box = np.max(np.abs(trajs[box_idx][:,:3])) / 2
+    lim_loop = np.max(np.abs(trajs[loop_idx][:,:3]))
 
-    for idx, label, colour, fname in [
-        (box_idx, 'Box', 'blue', 'ellip_box_orbit.pdf'),
-        (loop_idx, 'Loop/Tube', 'red', 'ellip_loop_orbit.pdf')]:
+    for idx, label, colour, fname, lim in [
+        (box_idx, "Box", "blue", "ellip_box_orbit.pdf", lim_box),
+        (loop_idx, 'Loop/Tube', 'red', 'ellip_loop_orbit.pdf', lim_loop)]:
         tr = trajs[idx]
         fig, axes = plt.subplots(1, 3, figsize=(14, 4.5))
         for ax, (i, j), xl, yl in [
