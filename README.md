@@ -19,10 +19,11 @@ agama-usage/
 │   ├── test1_exponential_disk_nfw.ini  # Simple disk+NFW template
 │   ├── test2_mw_host.ini     # MW-like host (Dehnen+disk+Log halo)
 │   └── test3_bar_potential.ini  # Bulge+disk+Ferrers bar+NFW halo
-├── examples/                 # Standalone example scripts
-│   ├── 01_load_from_ini.py   # Loading potentials from .ini files
-│   ├── 02_galaxy_model.py    # Full galaxy model with sampling
-│   └── 03_orbit_integration.py  # Orbit integration in various potentials
+├── examples/                 # Standalone demo scripts
+│   ├── demo1_disk_nfw_ics.py         # Exp disk + NFW N-body ICs
+│   ├── demo2_binary_bh_particles.py  # Binary BH test particle orbits
+│   ├── demo3_bar_box_loop_orbits.py  # Barred: box & loop orbits
+│   └── demo4_elliptical_box_loop_orbits.py  # Triaxial ellip: box & tube orbits
 └── reference/                # Detailed API reference docs
     ├── potentials.md
     ├── distribution_functions.md
